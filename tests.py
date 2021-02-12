@@ -6,7 +6,7 @@ class TestStringMethods(unittest.TestCase):
     def test_parrents(self):
         text = FileReader.read("./tests.py")
         refs = Parser.parse(text)
-        self.assertEqual(refs[2].parents,['Empty', 'unittest.TestCase'], "Should be equal")
+        self.assertEqual(refs[3].parents, ['Primary', 'Secondary'], "Should be equal")
 
     def test_isupper(self):
         self.assertTrue('FOO'.isupper())
@@ -19,10 +19,13 @@ class TestStringMethods(unittest.TestCase):
         with self.assertRaises(TypeError):
             s.split(2)
 
-class Empty():
+class Primary():
     pass
 
-class Multiple(Empty, unittest.TestCase ):
+class Secondary():
+    pass
+
+class Multiple(Primary, Secondary):
     pass
 
 if __name__ == '__main__':
