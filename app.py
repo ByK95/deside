@@ -33,7 +33,10 @@ class Parser():
 
     @staticmethod
     def append_fncs(d, cls):
-        for parent in cls.parents:
+        parents = cls.parents.copy()
+        for parent in parents:
+            if(len(d[parent].parents) > 0):
+                parents += d[parent].parents
             try:
                 cls.inh_fncs.append((parent, d[parent].fncs))
             except:
