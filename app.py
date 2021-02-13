@@ -18,6 +18,16 @@ class Cls():
             body += "\n\n#{}\n\n".format(fnc[0]) + ast.unparse(fnc[1])
         return body
 
+    def get_inh_tree(self, lookup_ref):
+        if(hasattr(self,"tree")):
+            return self.tree
+        tree = ""
+        for parent in self.parents:
+            tree += lookup_ref[parent].get_inh_tree(lookup_ref) + ", "
+        tree += "{}".format(self.name)
+        setattr(self,"tree",tree)
+        return self.tree
+
 class Parser():
 
     @staticmethod
