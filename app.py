@@ -1,4 +1,5 @@
 import ast
+from jinja2 import Template
 
 class Cls():
 
@@ -13,9 +14,13 @@ class Cls():
         return "<class {}>".format(self.name)
 
     def rebuild(self):
-        body = ast.unparse(self.astobj)
+        if hasattr(self, "body"):
+            return self.body
+        setattr(self, "base_body", ast.unparse(self.astobj))
+        body = self.base_body
         for fnc in self.inh_fncs:
             body += "\n\n#{}\n\n".format(fnc[0]) + ast.unparse(fnc[1])
+        setattr(self, "body", body)
         return body
 
     def get_inh_tree(self, lookup_ref):
@@ -52,6 +57,17 @@ class Parser():
             except:
                 pass
 
+class TemplateBuilder():
+    @staticmethod
+    def generate_template(cls, template):
+        t = Template(template)
+        kwargs = {
+            "tree":cls.tree,
+            "base":cls.base_body,
+            "rebuilt":cls.body
+            }
+        return t.render(**kwargs)
+
 class FileReader():
 
     @staticmethod
@@ -61,11 +77,22 @@ class FileReader():
             body = f.read()
         return body
 
+    @staticmethod
+    def write(path, text):
+        with open(path, "w+") as f:
+            f.write(text)
+
 ast_class = "<class 'ast.ClassDef'>"
 
 if __name__ == "__main__":
     text = FileReader.read("./sample.py")
+    template = FileReader.read("./templates/doc_template.md")
     refs = Parser.parse(text)
+    for a in refs:
+        refs[a].rebuild()
+        refs[a].get_inh_tree(refs)
+    generated = TemplateBuilder.generate_template(refs["Forth"], template)
+    FileReader.write("./project/docs/sample3.md",generated)
     
        
 # ast.unparse()
