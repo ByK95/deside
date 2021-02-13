@@ -2,11 +2,12 @@ import unittest
 from app import Parser, FileReader, Cls
 
 class TestStringMethods(unittest.TestCase):
+    test_file = "./sample.py"
 
-    def test_parrents(self):
-        text = FileReader.read("./tests.py")
+    def test_parents(self):
+        text = FileReader.read(self.test_file)
         refs = Parser.parse(text)
-        self.assertEqual(refs[3].parents, ['Primary', 'Secondary'], "Should be equal")
+        self.assertEqual(refs["Multiple"].parents, ['Primary', 'Secondary'], "Should be equal")
 
     def test_isupper(self):
         self.assertTrue('FOO'.isupper())
@@ -18,15 +19,6 @@ class TestStringMethods(unittest.TestCase):
         # check that s.split fails when the separator is not a string
         with self.assertRaises(TypeError):
             s.split(2)
-
-class Primary():
-    pass
-
-class Secondary():
-    pass
-
-class Multiple(Primary, Secondary):
-    pass
 
 if __name__ == '__main__':
     unittest.main()
