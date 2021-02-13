@@ -7,21 +7,37 @@ class Cls():
         self.name = astobj.name
         self.fncs = astobj.body
         self.parents = [ast.unparse(x) for x in astobj.bases]
+        self.inh_fncs = []
 
     def __repr__(self):
         return "<class {}>".format(self.name)
+
+    def rebuild(self):
+        body = ast.unparse(self.astobj)
+        for fnc in self.inh_fncs:
+            body += "\n\n#{}\n\n".format(fnc[0]) + ast.unparse(fnc[1])
+        return body
 
 class Parser():
 
     @staticmethod
     def parse(text):
-        refs = []
+        refs = {}
         tree = ast.parse(text)
         for branch in tree.body:
             if str(branch.__class__) == ast_class:
                 cls = Cls(branch)
-                refs.append(cls)
+                Parser.append_fncs(refs, cls)
+                refs[branch.name] = cls
         return refs
+
+    @staticmethod
+    def append_fncs(d, cls):
+        for parent in cls.parents:
+            try:
+                cls.inh_fncs.append((parent, d[parent].fncs))
+            except:
+                pass
 
 class FileReader():
 
@@ -35,7 +51,7 @@ class FileReader():
 ast_class = "<class 'ast.ClassDef'>"
 
 if __name__ == "__main__":
-    text = FileReader.read("./tests.py")
+    text = FileReader.read("./sample.py")
     refs = Parser.parse(text)
     
        
