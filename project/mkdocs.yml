@@ -1,6 +1,5 @@
 site_name: My Docs
 markdown_extensions:
-  - pymdownx.highlight
   - pymdownx.keys
   - pymdownx.snippets
   - pymdownx.superfences:
@@ -11,14 +10,27 @@ markdown_extensions:
   - pymdownx.tabbed
   - pymdownx.highlight:
       linenums: true
-  - pymdownx.highlight:
       linenums_style: pymdownx.inline
+  - pymdownx.inlinehilite
+  - pymdownx.critic
 extra_css:
   - https://unpkg.com/mermaid@7.1.2/dist/mermaid.css
 extra_javascript:
   - mermaid/mermaid.min.js
 theme:
   name: material
+  icon:
+    logo: material/cloud
+  features:
+    - navigation.sections
+  palette:
+    # Toggle light mode
+    - scheme: slate
+      primary: red
+      accent: blue
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
 nav:
     - Home: index.md
     - About: sample.md
