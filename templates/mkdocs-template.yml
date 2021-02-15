@@ -1,0 +1,35 @@
+site_name: My Docs
+markdown_extensions:
+  - pymdownx.keys
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_div_format
+  - pymdownx.tabbed
+  - pymdownx.highlight:
+      linenums: true
+      linenums_style: pymdownx.inline
+  - pymdownx.inlinehilite
+  - pymdownx.critic
+extra_css:
+  - https://unpkg.com/mermaid@7.1.2/dist/mermaid.css
+extra_javascript:
+  - mermaid/mermaid.min.js
+theme:
+  name: material
+  icon:
+    logo: material/cloud
+  features:
+    - navigation.sections
+  palette:
+    # Toggle light mode
+    - scheme: slate
+      primary: orange
+nav:
+    - Home: index.md
+    - About: sample.md
+    - Graph: graph.md
+    - Sample: sample2.md
+    - Sample3: sample3.md

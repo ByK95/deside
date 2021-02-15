@@ -1,5 +1,6 @@
 import ast
 from jinja2 import Template
+from jinja2.filters import do_indent
 
 class Cls():
 
@@ -19,7 +20,7 @@ class Cls():
         setattr(self, "base_body", ast.unparse(self.astobj))
         body = self.base_body
         for fnc in self.inh_fncs:
-            body += "\n\n#{}\n\n".format(fnc[0]) + ast.unparse(fnc[1])
+            body += do_indent("\n\n#{}\n\n".format(fnc[0]) + ast.unparse(fnc[1]), width=4, first=True)
         setattr(self, "body", body)
         return body
 
@@ -64,7 +65,7 @@ class TemplateBuilder():
         kwargs = {
             "tree":cls.tree,
             "base":cls.base_body,
-            "rebuilt":cls.body
+            "rebuilt":do_indent(cls.body, width=4)
             }
         return t.render(**kwargs)
 
